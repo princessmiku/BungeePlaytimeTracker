@@ -73,9 +73,9 @@ public final class BungeePlaytimeTracker extends Plugin {
     }
 
     public void runPlaytimeTask() {
-        if (playtimeTaskRunning) return;
-        playtimeTaskRunning = true;
         getProxy().getScheduler().runAsync(this, () -> {
+            if (playtimeTaskRunning) return;
+            playtimeTaskRunning = true;
             try {
                 for (UUID uuid : getPlayerSessions().keySet()) {
                     if (SharePoint.hasPlayerSession(uuid)) {
