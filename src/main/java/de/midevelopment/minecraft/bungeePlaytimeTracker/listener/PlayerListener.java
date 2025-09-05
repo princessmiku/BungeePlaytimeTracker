@@ -1,7 +1,6 @@
 package de.midevelopment.minecraft.bungeePlaytimeTracker.listener;
 
 import de.midevelopment.minecraft.bungeePlaytimeTracker.SharePoint;
-import de.midevelopment.minecraft.bungeePlaytimeTracker.database.PlaytimeHandler;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
