@@ -1,0 +1,5 @@
+name: BungeePlaytimeTracker
+version: '1.0'
+main: de.midevelopment.minecraft.bungeePlaytimeTracker.BungeePlaytimeTracker
+author: Miku
+description: Add Economy Commands and Functions to the basic Economy Handler of the core
