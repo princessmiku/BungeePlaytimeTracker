@@ -43,6 +43,8 @@ public final class BungeePlaytimeTracker extends Plugin {
         }
         if (configHandler.get("reload-players") == Boolean.TRUE) {
             SharePoint.getPlaytimeHandler().reloadAllPlayers();
+            configHandler.set("reload-players", false);
+            configHandler.saveConfig();
         }
 
         getProxy().getPluginManager().registerCommand(this, new PlaytimeCommand());
