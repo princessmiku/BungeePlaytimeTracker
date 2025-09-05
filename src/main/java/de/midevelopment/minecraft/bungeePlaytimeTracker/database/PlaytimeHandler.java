@@ -69,26 +69,27 @@ public class PlaytimeHandler {
         String sql_select = """
                 SELECT
                   ? AS player_uuid,
-                  COALESCE(SUM(
+                  SUM(
                     CASE
                       WHEN end_time IS NULL
                         THEN TIMESTAMPDIFF(SECOND, start_time, UTC_TIMESTAMP())
                       ELSE TIMESTAMPDIFF(SECOND, start_time, end_time)
                     END
-                  ), 0) AS total_seconds
+                  ) AS total_seconds
                 FROM mi_bungee_player_playtime_sessions
                 WHERE player_uuid = ?
                 """;
         String sql_update = """
                 UPDATE mi_bungee_player_playtime SET playtime = ? WHERE uuid = ?;
                 """;
-        try {
-            PreparedStatement ps = database.getConnection().prepareStatement(sql_select);
+        try (Connection connection = database.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql_select);
             ps.setString(1, uuid.toString());
+            ps.setString(2, uuid.toString());
             ps.executeQuery();
             ps.getResultSet().next();
-            int calcPlaytime = ps.getResultSet().getInt(1);
-            PreparedStatement ps2 = database.getConnection().prepareStatement(sql_update);
+            int calcPlaytime = ps.getResultSet().getInt(2);
+            PreparedStatement ps2 = connection.prepareStatement(sql_update);
             ps2.setInt(1, calcPlaytime);
             ps2.setString(2, uuid.toString());
             ps2.executeUpdate();
@@ -105,7 +106,7 @@ public class PlaytimeHandler {
                 """;
         String sql_select = """
                 SELECT id FROM mi_bungee_player_playtime_sessions
-                          WHERE player_uuid = ? AND servername = ? AND end_time = null LIMIT 1;
+                          WHERE player_uuid = ? ORDER BY id DESC LIMIT 1;
                 """;
         try (Connection connection = database.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql_insert);
@@ -115,7 +116,6 @@ public class PlaytimeHandler {
 
             PreparedStatement pst = connection.prepareStatement(sql_select);
             pst.setString(1, uuid.toString());
-            pst.setString(2, serverName);
             pst.executeQuery();
             pst.getResultSet().next();
             return pst.getResultSet().getInt(1);
@@ -124,6 +124,10 @@ public class PlaytimeHandler {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    public void updatePlaytime(int sessionId) {
+        stopPlaytime(sessionId);
     }
 
     public void stopPlaytime(int sessionId) {
@@ -173,12 +177,12 @@ public class PlaytimeHandler {
             List<PlaytimeSession> resultList = new ArrayList<>();
             while (ps.getResultSet().next()) {
                 resultList.add(new PlaytimeSession(
-                    ps.getResultSet().getInt(1),
-                    ps.getResultSet().getString(2),
-                    ps.getResultSet().getString(3),
-                    ps.getResultSet().getTimestamp(4),
-                    ps.getResultSet().getTimestamp(5),
-                    ps.getResultSet().getInt(6)
+                        ps.getResultSet().getInt(1),
+                        ps.getResultSet().getString(2),
+                        ps.getResultSet().getString(3),
+                        ps.getResultSet().getTimestamp(4),
+                        ps.getResultSet().getTimestamp(5),
+                        ps.getResultSet().getInt(6)
                 ));
             }
             return resultList;

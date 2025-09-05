@@ -1,17 +1,22 @@
 package de.midevelopment.minecraft.bungeePlaytimeTracker;
 
 import de.midevelopment.minecraft.bungeePlaytimeTracker.commands.PlaytimeCommand;
-import de.midevelopment.minecraft.bungeePlaytimeTracker.database.Database;
+import de.midevelopment.minecraft.bungeePlaytimeTracker.listener.PlayerListener;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.ConfigHandler;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.scheduler.ScheduledTask;
 
 import java.sql.SQLException;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import static de.midevelopment.minecraft.bungeePlaytimeTracker.SharePoint.*;
 
 public final class BungeePlaytimeTracker extends Plugin {
 
     private ConfigHandler configHandler;
+    private ScheduledTask playtimeTask;
+    private boolean playtimeTaskRunning = false;
 
     @Override
     public void onEnable() {
@@ -39,11 +44,36 @@ public final class BungeePlaytimeTracker extends Plugin {
 
 
         getProxy().getPluginManager().registerCommand(this, new PlaytimeCommand());
+        getProxy().getPluginManager().registerListener(this, new PlayerListener(this));
 
+        // Run PlaytimeTask every 30 se
+        playtimeTask = getProxy().getScheduler().schedule(this, this::runPlaytimeTask, 30, TimeUnit.SECONDS);
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        playtimeTask.cancel();
+        for (UUID uuid : getPlayerSessions().keySet()) {
+            if (SharePoint.hasPlayerSession(uuid)) {
+                SharePoint.getPlaytimeHandler().stopPlaytime(SharePoint.getPlayerSession(uuid));
+                SharePoint.removePlayerSession(uuid);
+            }
+        }
+    }
+
+    public void runPlaytimeTask() {
+        if (playtimeTaskRunning) return;
+        playtimeTaskRunning = true;
+        getProxy().getScheduler().runAsync(this, () -> {
+            try {
+                for (UUID uuid : getPlayerSessions().keySet()) {
+                    if (SharePoint.hasPlayerSession(uuid)) {
+                        SharePoint.getPlaytimeHandler().updatePlaytime(SharePoint.getPlayerSession(uuid));
+                    }
+                }
+            } finally {
+                playtimeTaskRunning = false;
+            }
+        });
     }
 }
