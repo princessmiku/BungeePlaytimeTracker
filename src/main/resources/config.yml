@@ -11,3 +11,17 @@ database:
 # Reload players on startup, if this enabled,
 # the plugin will take a while to load and will disable the setting afterward
 reload-players: false
+
+# Select servers for exclude in playtime calculation
+# If you exclude a server later, then you need to reload the players above for the change to take effect for all users.
+exclude-servers: []
+
+# Server name prettifier
+server-name-prettifier:
+  # Enable server name prettifier
+  enabled: false
+  # On the left side of the server name from BungeeCord,
+  # the plugin will replace this name with the prettified name
+  # just add the key and the value to this list
+  names:
+    EXAMPLE: My Example Server

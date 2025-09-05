@@ -1,6 +1,7 @@
 package de.midevelopment.minecraft.bungeePlaytimeTracker;
 
 import de.midevelopment.minecraft.bungeePlaytimeTracker.commands.PlaytimeCommand;
+import de.midevelopment.minecraft.bungeePlaytimeTracker.database.PlaytimeHandler;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.listener.PlayerListener;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.ConfigHandler;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -41,6 +42,12 @@ public final class BungeePlaytimeTracker extends Plugin {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        SharePoint.setPlaytimeHandler(new PlaytimeHandler(
+                getDatabase(),
+                configHandler.get("exclude-servers")
+        ));
+
         if (configHandler.get("reload-players") == Boolean.TRUE) {
             SharePoint.getPlaytimeHandler().reloadAllPlayers();
             configHandler.set("reload-players", false);

@@ -14,7 +14,9 @@ public class SharePoint {
 
     private static Database DATABASE = new Database();
 
-    private static PlaytimeHandler PLAYTIMEHANDLER = new PlaytimeHandler(DATABASE);
+    private static PlaytimeHandler PLAYTIMEHANDLER;
+
+    public static void setPlaytimeHandler(PlaytimeHandler playtimeHandler) { PLAYTIMEHANDLER = playtimeHandler; }
 
     public static PlaytimeHandler getPlaytimeHandler() { return PLAYTIMEHANDLER; }
 

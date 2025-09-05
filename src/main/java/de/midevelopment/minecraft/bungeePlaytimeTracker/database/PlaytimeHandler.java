@@ -13,9 +13,12 @@ import java.util.UUID;
 public class PlaytimeHandler {
 
     private final Database database;
+    private final String excludedServers;
 
-    public PlaytimeHandler(Database database) {
+    public PlaytimeHandler(Database database, List<String> excludedServers) {
         this.database = database;
+        this.excludedServers = excludedServers.stream().reduce("", (a, b) -> a + "'" + b + "',");
+
     }
 
     /**
@@ -78,7 +81,9 @@ public class PlaytimeHandler {
                   ) AS total_seconds
                 FROM mi_bungee_player_playtime_sessions
                 WHERE player_uuid = ?
-                """;
+                AND (servername NOT IN (%s) OR %s = '')
+                """.formatted(excludedServers.substring(0, Math.max(0, excludedServers.length() - 1)), excludedServers);
+
         String sql_update = """
                 UPDATE mi_bungee_player_playtime SET playtime = ? WHERE uuid = ?;
                 """;
@@ -147,7 +152,7 @@ public class PlaytimeHandler {
         String sql = """
                 SELECT uuid from mi_bungee_player_playtime
                 """;
-        try(Connection connection = database.getConnection()) {
+        try (Connection connection = database.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.executeQuery();
             while (ps.getResultSet().next()) {
