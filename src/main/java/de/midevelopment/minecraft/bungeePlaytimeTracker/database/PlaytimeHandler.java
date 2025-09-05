@@ -143,6 +143,22 @@ public class PlaytimeHandler {
         }
     }
 
+    public void reloadAllPlayers() {
+        String sql = """
+                SELECT uuid from mi_bungee_player_playtime
+                """;
+        try(Connection connection = database.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.executeQuery();
+            while (ps.getResultSet().next()) {
+                UUID uuid = UUID.fromString(ps.getResultSet().getString(1));
+                getPlayerCurrentPlaytime(uuid);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public PlaytimeSession getPlaytimeSession(int sessionId) {
         String sql = """
                 SELECT * FROM mi_bungee_player_playtime_sessions WHERE id = ?;;
@@ -210,5 +226,6 @@ public class PlaytimeHandler {
             this.diff_time = diff_time;
         }
     }
+
 
 }

@@ -7,3 +7,7 @@ database:
   database: bungee
   username: root
   password: password
+
+# Reload players on startup, if this enabled,
+# the plugin will take a while to load and will disable the setting afterward
+reload-players: false
