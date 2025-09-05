@@ -1,5 +1,6 @@
 package de.midevelopment.minecraft.bungeePlaytimeTracker;
 
+import de.midevelopment.minecraft.bungeePlaytimeTracker.commands.PlaytimeCommand;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.database.Database;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.ConfigHandler;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -10,17 +11,18 @@ import static de.midevelopment.minecraft.bungeePlaytimeTracker.SharePoint.*;
 
 public final class BungeePlaytimeTracker extends Plugin {
 
+    private ConfigHandler configHandler;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
         // load config
-        setConfigHandler(new ConfigHandler(
+        configHandler = new ConfigHandler(
                 this.getClass(),                // Class of the plugin
                 getDataFolder(),                // Plugin directory
                 "config.yml",                   // config file name
                 getLogger()                     // Logger for logging messages and errors
-        ));
-        ConfigHandler configHandler = getConfigHandler();
+        );
         getDatabase().init(
                 configHandler.get("database.host"),
                 configHandler.get("database.port"),
@@ -34,6 +36,9 @@ public final class BungeePlaytimeTracker extends Plugin {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+        getProxy().getPluginManager().registerCommand(this, new PlaytimeCommand());
 
     }
 

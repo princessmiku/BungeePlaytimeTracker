@@ -31,13 +31,13 @@ public final class Database {
     }
 
     public void createTables() throws SQLException {
-        String ddl = """
-                
-                """;
-        try (Connection con = getConnection();
-             Statement st = con.createStatement()) {
-            st.executeUpdate(ddl);
-        }
+        // String ddl = """
+        //
+        //         """;
+        // try (Connection con = getConnection();
+        //      Statement st = con.createStatement()) {
+        //     st.executeUpdate(ddl);
+        // }
     }
 
     public Connection getConnection() throws SQLException {
