@@ -1,4 +1,3 @@
-// Java
 package de.midevelopment.minecraft.bungeePlaytimeTracker.database;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -31,13 +30,37 @@ public final class Database {
     }
 
     public void createTables() throws SQLException {
-        // String ddl = """
-        //
-        //         """;
-        // try (Connection con = getConnection();
-        //      Statement st = con.createStatement()) {
-        //     st.executeUpdate(ddl);
-        // }
+        String ddl = """
+                 CREATE TABLE IF NOT EXISTS mi_bungee_player_playtime
+                (
+                    uuid     varchar(36)              not null
+                        primary key,
+                    username varchar(16)              null,
+                    playtime int unsigned default 0 null
+                );
+                
+                CREATE INDEX IF NOT EXISTS mi_bungee_player_playtime_playtime_index
+                    on mi_bungee_player_playtime (playtime desc);
+                
+                CREATE TABLE IF NOT EXISTS mi_bungee_player_playtime_sessions
+                (
+                    id          int unsigned auto_increment
+                        primary key,
+                    player_uuid varchar(36)                         not null,
+                    servername  varchar(32)                         null,
+                    start_time  timestamp default (utc_timestamp()) null,
+                    end_time    timestamp default (utc_timestamp()) null,
+                    diff_time   int as (timestampdiff(SECOND, `start_time`, `end_time`)) stored
+                )
+                    comment 'Past sessions of the player inside the bungee network';
+                
+                CREATE INDEX IF NOT EXISTS index_player_uuid
+                    on mi_bungee_player_playtime_sessions (player_uuid);
+                """;
+        try (Connection con = getConnection();
+             Statement st = con.createStatement()) {
+            st.executeUpdate(ddl);
+        }
     }
 
     public Connection getConnection() throws SQLException {
