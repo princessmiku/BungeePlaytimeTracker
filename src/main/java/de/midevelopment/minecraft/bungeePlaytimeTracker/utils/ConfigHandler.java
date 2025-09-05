@@ -29,9 +29,10 @@ public class ConfigHandler {
      * Represents the in-memory representation of the configuration file, used to
      * manage and interact with configuration data. This variable stores all configuration
      * values and is synchronized with the configuration file when loading or saving.
-     *
+     * <p>
      * The configuration object is loaded using {@link #loadConfig()}, and any updates
-     * to the configuration can be persisted back to the file using {@*/
+     * to the configuration can be persisted back to the file using {@
+     */
     private Configuration configuration;
 
     /**
@@ -45,35 +46,35 @@ public class ConfigHandler {
      * Initializes a new instance of the ConfigHandler class, which manages a configuration file.
      *
      * @param resourceClass The class used to locate the default configuration resource.
-     * @param pluginFolder The directory where the configuration file will be stored.
-     * @param configName The name of the configuration file.
-     * @param logger The logger instance for logging messages and errors.
+     * @param pluginFolder  The directory where the configuration file will be stored.
+     * @param configName    The name of the configuration file.
+     * @param logger        The logger instance for logging messages and errors.
      */
     public ConfigHandler(Class<?> resourceClass, File pluginFolder, String configName, Logger logger) {
         this.logger = logger;
 
-        // Plugin-Verzeichnis erstellen, falls es nicht existiert
+        // Create plugin directory if it does not exist
         if (!pluginFolder.exists() && !pluginFolder.mkdir()) {
-            logger.severe("Konnte das Plugin-Verzeichnis nicht erstellen: " + pluginFolder.getPath());
+            logger.severe("Could not create plugin directory: " + pluginFolder.getPath());
         }
 
-        this.configFile = new File(pluginFolder, configName); // configName als Name der Datei
+        this.configFile = new File(pluginFolder, configName); // configName as file name
 
         try {
-            // Standard-Konfigurationsdatei wird mithilfe des Ressourcenkontexts der Klasse geladen
-            String resourcePath = configName; // Datei im selben Pfad wie die Klasse
+            // Default configuration file is loaded using the resource context of the class
+            String resourcePath = configName; // File in the same path as the class
             if (!configFile.exists()) {
                 copyDefaultConfig(resourceClass, resourcePath);
-                logger.info("Standard-Config aus Ressourcen kopiert: " + configFile.getPath());
+                logger.info("Default config copied from resources: " + configFile.getPath());
             }
 
             loadConfig();
 
-            // Synchronisiere die Konfiguration mit der Standarddatei
+            // Synchronize configuration with default file
             syncWithDefaultConfig(resourceClass, configName);
 
         } catch (IOException e) {
-            logger.severe("Fehler beim Initialisieren der Config-Datei: " + e.getMessage());
+            logger.severe("Error initializing config file: " + e.getMessage());
         }
     }
 
@@ -81,29 +82,31 @@ public class ConfigHandler {
      * Loads the configuration from the specified configuration file into memory.
      * If an error occurs during this process (e.g., the file cannot be read),
      * a log message is generated to indicate the issue.
-     *
-     * This method retrieves the*/
+     * <p>
+     * This method retrieves the
+     */
     public void loadConfig() {
         try {
             this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
         } catch (IOException e) {
-            logger.severe("Fehler beim Laden der Config-Datei: " + e.getMessage());
+            logger.severe("Error loading config file: " + e.getMessage());
         }
     }
 
     /**
      * Saves the current configuration from memory to the configuration file.
-     *
+     * <p>
      * This method uses a {@link ConfigurationProvider} to save the in-memory
      * configuration to the associated file. If an I/O error occurs during the
      * save operation, an error message will be logged.
-     *
-     * Errors during save attempts*/
+     * <p>
+     * Errors during save attempts
+     */
     public void saveConfig() {
         try {
             ConfigurationProvider.getProvider(YamlConfiguration.class).save(configuration, configFile);
         } catch (IOException e) {
-            logger.severe("Fehler beim Speichern der Config-Datei: " + e.getMessage());
+            logger.severe("Error saving config file: " + e.getMessage());
         }
     }
 
@@ -112,24 +115,25 @@ public class ConfigHandler {
      * If the provided resourceClass is null or the resource cannot be found, appropriate exceptions will be thrown.
      *
      * @param resourceClass the class whose class loader will be used to locate the resource
-     * @param resourcePath the path to the default configuration file within the resource
-     * @throws IOException if the resource cannot be found or*/
+     * @param resourcePath  the path to the default configuration file within the resource
+     * @throws IOException if the resource cannot be found or
+     */
     private void copyDefaultConfig(Class<?> resourceClass, String resourcePath) throws IOException {
         if (resourceClass == null) {
-            throw new IllegalArgumentException("Die angegebene Klasse darf nicht null sein!");
+            throw new IllegalArgumentException("The specified class must not be null!");
         }
 
         InputStream resourceStream = resourceClass.getClassLoader().getResourceAsStream(resourcePath);
 
         if (resourceStream == null) {
-            throw new IOException("Ressource " + resourcePath + " nicht gefunden! Klasse: " + resourceClass.getName());
+            throw new IOException("Resource " + resourcePath + " not found! Class: " + resourceClass.getName());
         }
 
         try {
             Files.copy(resourceStream, configFile.toPath());
-            logger.info("Die Standardkonfiguration wurde erfolgreich an " + configFile.toPath() + " kopiert.");
+            logger.info("The default configuration was successfully copied to " + configFile.toPath());
         } catch (IOException e) {
-            logger.severe("Fehler beim Kopieren der Standard-Config: " + e.getMessage());
+            logger.severe("Error copying default config: " + e.getMessage());
             throw e;
         } finally {
             resourceStream.close();
@@ -142,29 +146,30 @@ public class ConfigHandler {
      *
      * @param resourceClass The class whose classloader is used to locate the default configuration resource.
      *                      Must not be null.
-     * @param resourcePath  The path to the default configuration file*/
+     * @param resourcePath  The path to the default configuration file
+     */
     private void syncWithDefaultConfig(Class<?> resourceClass, String resourcePath) {
         try {
             if (resourceClass == null) {
-                throw new IllegalArgumentException("Die angegebene Klasse darf nicht null sein!");
+                throw new IllegalArgumentException("The specified class must not be null!");
             }
 
             InputStream resourceStream = resourceClass.getClassLoader().getResourceAsStream(resourcePath);
 
             if (resourceStream == null) {
-                throw new IOException("Ressource " + resourcePath + " nicht gefunden!");
+                throw new IOException("Resource " + resourcePath + " not found!");
             }
 
             Configuration defaultConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(resourceStream);
 
-            // Synchronisiere die Standardwerte mit der aktuellen Konfiguration
+            // Synchronize default values with current configuration
             addMissingKeys(defaultConfig, configuration);
 
-            // Speichere die aktualisierte lokale Konfiguration
+            // Save updated local configuration
             saveConfig();
 
         } catch (IOException e) {
-            logger.severe("Fehler beim Synchronisieren mit der Standard-Config: " + e.getMessage());
+            logger.severe("Error synchronizing with default config: " + e.getMessage());
         }
     }
 
@@ -177,10 +182,10 @@ public class ConfigHandler {
      **/
     private void addMissingKeys(Configuration defaultConfig, Configuration localConfig) {
         for (String key : defaultConfig.getKeys()) {
-            // Wenn der Schlüssel in der lokalen Config fehlt, füge ihn hinzu
+            // If key is missing in local config, add it
             if (!localConfig.contains(key)) {
                 localConfig.set(key, defaultConfig.get(key));
-                logger.info("Fehlender Schlüssel hinzugefügt: " + key);
+                logger.info("Missing key added: " + key);
             }
         }
     }
@@ -188,8 +193,9 @@ public class ConfigHandler {
     /**
      * Sets a configuration value for the specified path and saves the configuration file.
      *
-     * @param path the configuration path where the value will be set
-     * @param value the value to set for the specified*/
+     * @param path  the configuration path where the value will be set
+     * @param value the value to set for the specified
+     */
     public void set(String path, Object value) {
         configuration.set(path, value);
         saveConfig();
@@ -202,7 +208,8 @@ public class ConfigHandler {
      * @param <T>  The type to which the retrieved value should be cast.
      * @param path The path in the configuration from which the value will be retrieved.
      *             This path must be present in the configuration, otherwise an exception is thrown.
-     * @return The value retrieved from the configuration at*/
+     * @return The value retrieved from the configuration at
+     */
     @SuppressWarnings("unchecked")
     public <T> T get(String path) {
         if (configuration.contains(path)) {
