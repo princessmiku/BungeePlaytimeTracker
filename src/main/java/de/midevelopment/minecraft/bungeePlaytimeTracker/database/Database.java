@@ -31,18 +31,18 @@ public final class Database {
 
     public void createTables() throws SQLException {
         String ddl = """
-                 CREATE TABLE IF NOT EXISTS mi_bungee_player_playtime
+                create table if not exists mi_bungee_player_playtime
                 (
-                    uuid     varchar(36)              not null
-                        primary key,
+                    uuid     varchar(36)              not null,
                     username varchar(16)              null,
-                    playtime int unsigned default 0 null
+                    playtime int unsigned default 0 null,
+                    primary key (uuid)
                 );
                 
-                CREATE INDEX IF NOT EXISTS mi_bungee_player_playtime_playtime_index
+                create index index_playtime
                     on mi_bungee_player_playtime (playtime desc);
                 
-                CREATE TABLE IF NOT EXISTS mi_bungee_player_playtime_sessions
+                create table if not exists mi_bungee_player_playtime_sessions
                 (
                     id          int unsigned auto_increment
                         primary key,
@@ -54,7 +54,7 @@ public final class Database {
                 )
                     comment 'Past sessions of the player inside the bungee network';
                 
-                CREATE INDEX IF NOT EXISTS index_player_uuid
+                create index index_player_uuid
                     on mi_bungee_player_playtime_sessions (player_uuid);
                 """;
         try (Connection con = getConnection();
