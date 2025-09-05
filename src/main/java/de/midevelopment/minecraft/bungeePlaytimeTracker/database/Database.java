@@ -17,12 +17,12 @@ public final class Database {
         cfg.setJdbcUrl("jdbc:mysql://" + host + ":" + port + "/" + database + "?useSSL=" + useSSL + "&characterEncoding=utf8");
         cfg.setUsername(user);
         cfg.setPassword(pass);
-        cfg.setMaximumPoolSize(5);          // klein halten
+        cfg.setMaximumPoolSize(5);
         cfg.setMinimumIdle(1);
-        cfg.setConnectionTimeout(8000);     // ms
-        cfg.setIdleTimeout(60000);          // ms
-        cfg.setMaxLifetime(600000);         // ms
-        // Wichtig für MySQL timeouts:
+        cfg.setConnectionTimeout(8000);
+        cfg.setIdleTimeout(60000);
+        cfg.setMaxLifetime(600000);
+        cfg.setAutoCommit(true);
         cfg.addDataSourceProperty("cachePrepStmts", "true");
         cfg.addDataSourceProperty("prepStmtCacheSize", "250");
         cfg.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
@@ -32,8 +32,8 @@ public final class Database {
 
     public void createTables() throws SQLException {
         String ddl = """
-
-            """;
+                
+                """;
         try (Connection con = getConnection();
              Statement st = con.createStatement()) {
             st.executeUpdate(ddl);
