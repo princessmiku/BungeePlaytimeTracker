@@ -17,8 +17,11 @@ public class PlaytimeHandler {
 
     public PlaytimeHandler(Database database, List<String> excludedServers) {
         this.database = database;
-        this.excludedServers = excludedServers.stream().reduce("", (a, b) -> a + "'" + b + "',");
-
+        if (excludedServers.isEmpty()) {
+            this.excludedServers = "";
+        } else {
+            this.excludedServers = excludedServers.stream().reduce("", (a, b) -> a + "'" + b + "',");
+        }
     }
 
     /**
@@ -69,7 +72,9 @@ public class PlaytimeHandler {
     }
 
     public int getPlayerCurrentPlaytime(UUID uuid) {
-        String sql_select = """
+        String sql_select;
+        if (excludedServers.isEmpty()) {
+            sql_select = """
                 SELECT
                   ? AS player_uuid,
                   SUM(
@@ -81,8 +86,23 @@ public class PlaytimeHandler {
                   ) AS total_seconds
                 FROM mi_bungee_player_playtime_sessions
                 WHERE player_uuid = ?
-                AND (servername NOT IN (%s) OR %s = '')
-                """.formatted(excludedServers.substring(0, Math.max(0, excludedServers.length() - 1)), excludedServers);
+                """;
+        } else {
+            sql_select = """
+                SELECT
+                  ? AS player_uuid,
+                  SUM(
+                    CASE
+                      WHEN end_time IS NULL
+                        THEN TIMESTAMPDIFF(SECOND, start_time, UTC_TIMESTAMP())
+                      ELSE TIMESTAMPDIFF(SECOND, start_time, end_time)
+                    END
+                  ) AS total_seconds
+                FROM mi_bungee_player_playtime_sessions
+                WHERE player_uuid = ?
+                AND servername NOT IN (%s)
+                """.formatted(excludedServers.substring(0, excludedServers.length() - 1));
+        }
 
         String sql_update = """
                 UPDATE mi_bungee_player_playtime SET playtime = ? WHERE uuid = ?;
@@ -137,7 +157,7 @@ public class PlaytimeHandler {
 
     public void stopPlaytime(int sessionId) {
         String sql = """
-                UPDATE mi_bungee_player_playtime_sessions SET end_time = UTC_TIMESTAMP WHERE id = ?;
+                UPDATE mi_bungee_player_playtime_sessions SET end_time = UTC_TIMESTAMP() WHERE id = ?;
                 """;
         try (Connection connection = database.getConnection()) {
             PreparedStatement ps = connection.prepareStatement(sql);
