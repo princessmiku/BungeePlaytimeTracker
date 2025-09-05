@@ -30,43 +30,60 @@ public final class Database {
     }
 
     public void createTables() throws SQLException {
-        String[] statements = {
+        String[] createTableStatements = {
                 """
-            create table if not exists mi_bungee_player_playtime
-            (
-                uuid     varchar(36)              not null,
-                username varchar(16)              null,
-                playtime int unsigned default 0 null,
-                primary key (uuid)
-            );
-            """,
+        create table if not exists mi_bungee_player_playtime
+        (
+            uuid     varchar(36)              not null,
+            username varchar(16)              null,
+            playtime int unsigned default 0 null,
+            primary key (uuid)
+        );
+        """,
                 """
-            create index if not exists index_playtime
-                on mi_bungee_player_playtime (playtime desc);
-            """,
-                """
-            create table if not exists mi_bungee_player_playtime_sessions
-            (
-                id          int unsigned auto_increment
-                    primary key,
-                player_uuid varchar(36)                         not null,
-                servername  varchar(32)                         null,
-                start_time  timestamp default (utc_timestamp()) null,
-                end_time    timestamp default (utc_timestamp()) null,
-                diff_time   int as (timestampdiff(SECOND, `start_time`, `end_time`)) stored
-            )
-                comment 'Past sessions of the player inside the bungee network';
-            """,
-                """
-            create index if not exists index_player_uuid
-                on mi_bungee_player_playtime_sessions (player_uuid);
-            """
+        create table if not exists mi_bungee_player_playtime_sessions
+        (
+            id          int unsigned auto_increment
+                primary key,
+            player_uuid varchar(36)                         not null,
+            servername  varchar(32)                         null,
+            start_time  timestamp default (utc_timestamp()) null,
+            end_time    timestamp default (utc_timestamp()) null,
+            diff_time   int as (timestampdiff(SECOND, `start_time`, `end_time`)) stored
+        )
+            comment 'Past sessions of the player inside the bungee network';
+        """
         };
+
+        String[] createIndexStatements = {
+                """
+        create index index_playtime
+            on mi_bungee_player_playtime (playtime desc);
+        """,
+                """
+        create index index_player_uuid
+            on mi_bungee_player_playtime_sessions (player_uuid);
+        """
+        };
+
 
         try (Connection con = getConnection();
              Statement st = con.createStatement()) {
-            for (String sql : statements) {
+            // Tabellen erstellen
+            for (String sql : createTableStatements) {
                 st.executeUpdate(sql);
+            }
+
+            // Indizes erstellen - Fehler ignorieren, wenn Index bereits existiert
+            for (String sql : createIndexStatements) {
+                try {
+                    st.executeUpdate(sql);
+                } catch (SQLException e) {
+                    // Ignoriere Fehler 1061 (Index existiert bereits)
+                    if (e.getErrorCode() != 1061) {
+                        throw e;
+                    }
+                }
             }
         }
     }
