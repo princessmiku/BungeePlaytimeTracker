@@ -17,7 +17,7 @@ public final class BungeePlaytimeTracker extends Plugin {
 
     private ConfigHandler configHandler;
     private ScheduledTask playtimeTask;
-    private boolean playtimeTaskRunning = false;
+    private static boolean playtimeTaskRunning = false;
 
     @Override
     public void onEnable() {
@@ -57,8 +57,8 @@ public final class BungeePlaytimeTracker extends Plugin {
         getProxy().getPluginManager().registerCommand(this, new PlaytimeCommand());
         getProxy().getPluginManager().registerListener(this, new PlayerListener(this));
 
-        // Run PlaytimeTask every 30 se
-        playtimeTask = getProxy().getScheduler().schedule(this, this::runPlaytimeTask, 30, TimeUnit.SECONDS);
+        // Run PlaytimeTask every 30 seconds
+        playtimeTask = getProxy().getScheduler().schedule(this, this::runPlaytimeTask, 30, 30, TimeUnit.SECONDS);
     }
 
     @Override
@@ -74,8 +74,9 @@ public final class BungeePlaytimeTracker extends Plugin {
 
     public void runPlaytimeTask() {
         getProxy().getScheduler().runAsync(this, () -> {
-            if (playtimeTaskRunning) return;
-            playtimeTaskRunning = true;
+            if (isPlaytimeTaskRunning() || getProxy().getOnlineCount() < 1) return;
+            setPlaytimeTaskRunning(true);
+            getLogger().info("Update Playtime-Sessions...");
             try {
                 for (UUID uuid : getPlayerSessions().keySet()) {
                     if (SharePoint.hasPlayerSession(uuid)) {
@@ -83,8 +84,10 @@ public final class BungeePlaytimeTracker extends Plugin {
                     }
                 }
             } finally {
-                playtimeTaskRunning = false;
+                setPlaytimeTaskRunning(false);
             }
         });
     }
+    private static boolean isPlaytimeTaskRunning() { return playtimeTaskRunning; }
+    private static void setPlaytimeTaskRunning(boolean running) { playtimeTaskRunning = running; }
 }
