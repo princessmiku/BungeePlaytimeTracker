@@ -1,0 +1,14 @@
+{
+  "unknown": "sconosciuto",
+  "player_only": "Devi essere un giocatore per usare questo comando. La console non ha tempo di gioco!",
+  "playtime": "Tempo di gioco",
+  "day": "giorno",
+  "days": "giorni",
+  "hour": "ora",
+  "hours": "ore",
+  "minute": "minuto",
+  "minutes": "minuti",
+  "second": "secondo",
+  "seconds": "secondi",
+  "and": "e"
+}

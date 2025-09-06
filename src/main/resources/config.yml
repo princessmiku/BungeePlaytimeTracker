@@ -1,4 +1,6 @@
 # BungeePlaytimeTracker configuration
+language: en
+print_session_update: true
 
 # MySQL or MariaDB configuration
 database:

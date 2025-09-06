@@ -4,6 +4,7 @@ import de.midevelopment.minecraft.bungeePlaytimeTracker.commands.PlaytimeCommand
 import de.midevelopment.minecraft.bungeePlaytimeTracker.database.PlaytimeHandler;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.listener.PlayerListener;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.ConfigHandler;
+import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.LocaleHandler;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.ScheduledTask;
 
@@ -18,6 +19,7 @@ public final class BungeePlaytimeTracker extends Plugin {
     private ConfigHandler configHandler;
     private ScheduledTask playtimeTask;
     private static boolean playtimeTaskRunning = false;
+    private boolean printSessionUpdateMessage = true;
 
     @Override
     public void onEnable() {
@@ -29,6 +31,8 @@ public final class BungeePlaytimeTracker extends Plugin {
                 "config.yml",                   // config file name
                 getLogger()                     // Logger for logging messages and errors
         );
+        LocaleHandler.loadLocale( configHandler.get("locale"));
+        printSessionUpdateMessage = configHandler.get("print_session_update");
         getDatabase().init(
                 configHandler.get("database.host"),
                 configHandler.get("database.port"),
@@ -76,7 +80,7 @@ public final class BungeePlaytimeTracker extends Plugin {
         getProxy().getScheduler().runAsync(this, () -> {
             if (isPlaytimeTaskRunning() || getProxy().getOnlineCount() < 1) return;
             setPlaytimeTaskRunning(true);
-            getLogger().info("Update Playtime-Sessions...");
+            if (printSessionUpdateMessage) getLogger().info("Update Playtime-Sessions...");
             try {
                 for (UUID uuid : getPlayerSessions().keySet()) {
                     if (SharePoint.hasPlayerSession(uuid)) {

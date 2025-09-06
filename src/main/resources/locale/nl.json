@@ -1,0 +1,14 @@
+{
+  "unknown": "onbekend",
+  "player_only": "Je moet een speler zijn om dit commando te gebruiken. De console heeft geen speeltijd!",
+  "playtime": "Speeltijd",
+  "day": "dag",
+  "days": "dagen",
+  "hour": "uur",
+  "hours": "uren",
+  "minute": "minuut",
+  "minutes": "minuten",
+  "second": "seconde",
+  "seconds": "seconden",
+  "and": "en"
+}

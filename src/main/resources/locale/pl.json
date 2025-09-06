@@ -1,0 +1,14 @@
+{
+  "unknown": "nieznane",
+  "player_only": "Musisz być graczem, aby użyć tego polecenia. Konsola nie ma czasu gry!",
+  "playtime": "Czas gry",
+  "day": "dzień",
+  "days": "dni",
+  "hour": "godzina",
+  "hours": "godzin",
+  "minute": "minuta",
+  "minutes": "minut",
+  "second": "sekunda",
+  "seconds": "sekund",
+  "and": "i"
+}

@@ -1,0 +1,14 @@
+{
+  "unknown": "unknown",
+  "player_only": "You must be a player to use this command. The console has no playtime!",
+  "playtime": "Playtime",
+  "day": "day",
+  "days": "days",
+  "hour": "hour",
+  "hours": "hours",
+  "minute": "minute",
+  "minutes": "minutes",
+  "second": "second",
+  "seconds": "seconds",
+  "and": "and"
+}

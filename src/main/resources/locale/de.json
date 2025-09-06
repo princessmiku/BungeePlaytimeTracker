@@ -1,0 +1,14 @@
+{
+  "unknown": "Unbekannt",
+  "player_only": "Das ist ein Spieler-Only-Befehl. Der Konsolenspieler hat keine Spielzeit!",
+  "playtime": "Spielzeit",
+  "day": "Tag",
+  "days": "Tage",
+  "hour": "Stunde",
+  "hours": "Stunden",
+  "minute": "Minute",
+  "minutes": "Minuten",
+  "second": "Sekunde",
+  "seconds": "Sekunden",
+  "and": "und"
+}

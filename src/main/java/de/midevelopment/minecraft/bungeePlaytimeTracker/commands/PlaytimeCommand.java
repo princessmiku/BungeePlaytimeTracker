@@ -1,6 +1,7 @@
 package de.midevelopment.minecraft.bungeePlaytimeTracker.commands;
 
 import de.midevelopment.minecraft.bungeePlaytimeTracker.SharePoint;
+import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.LocaleHandler;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.TimeConverter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
@@ -32,7 +33,7 @@ public class PlaytimeCommand extends Command {
         if (!(commandSender instanceof ProxiedPlayer player)) {
             commandSender.sendMessage(
                     new TextComponent(
-                            ChatColor.RED + "You must be a player to use this command. The console has no playtime!"
+                            ChatColor.RED + LocaleHandler.get("player_only")
                     )
             );
             return;
@@ -59,7 +60,7 @@ public class PlaytimeCommand extends Command {
         line.setColor(ChatColor.DARK_GRAY);
         line.setStrikethrough(true);
 
-        TextComponent title = new TextComponent(" ⏱ Playtime");
+        TextComponent title = new TextComponent(" ⏱ " + LocaleHandler.get("playtime"));
         title.setColor(ChatColor.of("#55FFAA"));
         title.setBold(true);
 
