@@ -1,6 +1,6 @@
 # BungeePlaytimeTracker configuration
 language: en
-print-session-update: true
+print-session-update: false
 
 # MySQL or MariaDB configuration
 database:
