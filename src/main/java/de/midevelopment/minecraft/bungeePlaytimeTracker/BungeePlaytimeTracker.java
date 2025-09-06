@@ -31,7 +31,7 @@ public final class BungeePlaytimeTracker extends Plugin {
                 "config.yml",                   // config file name
                 getLogger()                     // Logger for logging messages and errors
         );
-        LocaleHandler.loadLocale( configHandler.get("locale"));
+        LocaleHandler.loadLocale( configHandler.get("language"));
         printSessionUpdateMessage = configHandler.get("print_session_update");
         getDatabase().init(
                 configHandler.get("database.host"),
