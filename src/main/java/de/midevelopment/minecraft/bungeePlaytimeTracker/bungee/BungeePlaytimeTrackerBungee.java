@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import static de.midevelopment.minecraft.bungeePlaytimeTracker.SharePoint.*;
 
-public final class BungeePlaytimeTracker extends Plugin {
+public final class BungeePlaytimeTrackerBungee extends Plugin {
 
     private ConfigHandler configHandler;
     private ScheduledTask playtimeTask;

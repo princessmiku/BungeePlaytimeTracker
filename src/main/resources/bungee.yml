@@ -1,5 +1,5 @@
 name: BungeePlaytimeTracker
 version: '1.0'
-main: de.midevelopment.minecraft.bungeePlaytimeTracker.bungee.BungeePlaytimeTracker
+main: de.midevelopment.minecraft.bungeePlaytimeTracker.bungee.BungeePlaytimeTrackerBungee
 author: Miku
 description: Tracks the playtime of players inside the BungeeCord network.
