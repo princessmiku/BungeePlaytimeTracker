@@ -17,7 +17,7 @@ public class BungeePlaytimeTrackerSpigot extends JavaPlugin {
         saveDefaultConfig();
         FileConfiguration config = getConfig();
         LocaleHandler.loadLocale(config.getString("language"));
-        getDatabase().init(
+        SharePoint.getDatabase().init(
                 config.getString("database.host"),
                 config.getInt("database.port"),
                 config.getString("database.database"),
@@ -26,7 +26,7 @@ public class BungeePlaytimeTrackerSpigot extends JavaPlugin {
                 false
         );
         SharePoint.setPlaytimeHandler(new PlaytimeHandler(
-                getDatabase(),
+                SharePoint.getDatabase(),
                 config.getStringList("exclude-servers")
         ));
         new PlaceholderAPIWrapper().register();

@@ -2,6 +2,7 @@ name: BungeePlaytimeTracker
 version: '1.0'
 main: de.midevelopment.minecraft.bungeePlaytimeTracker.spigot.BungeePlaytimeTrackerSpigot
 author: Miku
+api-version: 1.19
 description: Tracks the playtime of players inside the BungeeCord network.
 
 depend:
