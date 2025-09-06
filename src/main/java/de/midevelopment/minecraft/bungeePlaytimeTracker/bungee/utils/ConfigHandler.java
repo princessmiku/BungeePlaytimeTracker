@@ -1,4 +1,4 @@
-package de.midevelopment.minecraft.bungeePlaytimeTracker.utils;
+package de.midevelopment.minecraft.bungeePlaytimeTracker.bungee.utils;
 
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;

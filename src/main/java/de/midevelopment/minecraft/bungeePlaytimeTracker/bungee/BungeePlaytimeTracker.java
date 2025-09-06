@@ -1,9 +1,10 @@
-package de.midevelopment.minecraft.bungeePlaytimeTracker;
+package de.midevelopment.minecraft.bungeePlaytimeTracker.bungee;
 
-import de.midevelopment.minecraft.bungeePlaytimeTracker.commands.PlaytimeCommand;
+import de.midevelopment.minecraft.bungeePlaytimeTracker.SharePoint;
+import de.midevelopment.minecraft.bungeePlaytimeTracker.bungee.commands.PlaytimeCommand;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.database.PlaytimeHandler;
-import de.midevelopment.minecraft.bungeePlaytimeTracker.listener.PlayerListener;
-import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.ConfigHandler;
+import de.midevelopment.minecraft.bungeePlaytimeTracker.bungee.listener.PlayerListener;
+import de.midevelopment.minecraft.bungeePlaytimeTracker.bungee.utils.ConfigHandler;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.LocaleHandler;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.scheduler.ScheduledTask;

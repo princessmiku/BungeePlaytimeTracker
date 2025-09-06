@@ -1,4 +1,4 @@
-package de.midevelopment.minecraft.bungeePlaytimeTracker.commands;
+package de.midevelopment.minecraft.bungeePlaytimeTracker.bungee.commands;
 
 import de.midevelopment.minecraft.bungeePlaytimeTracker.SharePoint;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.LocaleHandler;

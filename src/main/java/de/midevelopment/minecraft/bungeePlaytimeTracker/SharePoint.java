@@ -2,7 +2,6 @@ package de.midevelopment.minecraft.bungeePlaytimeTracker;
 
 import de.midevelopment.minecraft.bungeePlaytimeTracker.database.Database;
 import de.midevelopment.minecraft.bungeePlaytimeTracker.database.PlaytimeHandler;
-import de.midevelopment.minecraft.bungeePlaytimeTracker.utils.ConfigHandler;
 
 import java.util.HashMap;
 import java.util.Map;

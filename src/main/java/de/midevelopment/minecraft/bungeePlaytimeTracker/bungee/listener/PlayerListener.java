@@ -1,4 +1,4 @@
-package de.midevelopment.minecraft.bungeePlaytimeTracker.listener;
+package de.midevelopment.minecraft.bungeePlaytimeTracker.bungee.listener;
 
 import de.midevelopment.minecraft.bungeePlaytimeTracker.SharePoint;
 import net.md_5.bungee.api.ProxyServer;
