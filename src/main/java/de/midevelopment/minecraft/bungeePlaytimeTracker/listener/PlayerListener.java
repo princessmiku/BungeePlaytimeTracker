@@ -23,7 +23,7 @@ public class PlayerListener implements Listener {
         ProxiedPlayer player = event.getPlayer();
 
         ProxyServer.getInstance().getScheduler().runAsync(plugin, () -> {
-            SharePoint.getPlaytimeHandler().registerPlayer(player);
+            SharePoint.getPlaytimeHandler().registerPlayer(player.getUniqueId(), player.getName());
         });
     }
 

@@ -1,7 +1,5 @@
 package de.midevelopment.minecraft.bungeePlaytimeTracker.database;
 
-import net.md_5.bungee.api.connection.ProxiedPlayer;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -22,15 +20,6 @@ public class PlaytimeHandler {
         } else {
             this.excludedServers = excludedServers.stream().reduce("", (a, b) -> a + "'" + b + "',");
         }
-    }
-
-    /**
-     * Registers a player in the database using their unique identifier and name.
-     *
-     * @param player the ProxiedPlayer instance representing the player to register
-     */
-    public void registerPlayer(ProxiedPlayer player) {
-        registerPlayer(player.getUniqueId(), player.getName());
     }
 
     /**
