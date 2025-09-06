@@ -4,9 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class PlaytimeHandler {
 
@@ -170,6 +168,25 @@ public class PlaytimeHandler {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public Map<String, Integer> getTopPlayers(int amount) {
+        String sql = """
+                SELECT username, playtime FROM mi_bungee_player_playtime ORDER BY playtime DESC LIMIT ?;
+                """;
+        try(Connection connection = database.getConnection()) {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, amount);
+            ps.executeQuery();
+            Map<String, Integer> resultMap = new HashMap<>();
+            while (ps.getResultSet().next()) {
+                resultMap.put(ps.getResultSet().getString(1), ps.getResultSet().getInt(2));
+            }
+            return resultMap;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new HashMap<>();
         }
     }
 

@@ -2,6 +2,7 @@
   "unknown": "unknown",
   "player_only": "You must be a player to use this command. The console has no playtime!",
   "playtime": "Playtime",
+  "playtime_leaderboard": "Playtime Leaderboard",
   "day": "day",
   "days": "days",
   "hour": "hour",

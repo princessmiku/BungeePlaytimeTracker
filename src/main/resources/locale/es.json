@@ -2,6 +2,7 @@
   "unknown": "desconocido",
   "player_only": "Debes ser un jugador para usar este comando. ¡La consola no tiene tiempo de juego!",
   "playtime": "Tiempo de juego",
+  "playtime_leaderboard": "Tabla de clasificación de tiempo de juego",
   "day": "día",
   "days": "días",
   "hour": "hora",

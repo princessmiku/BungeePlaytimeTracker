@@ -2,6 +2,7 @@
   "unknown": "Unbekannt",
   "player_only": "Das ist ein Spieler-Only-Befehl. Der Konsolenspieler hat keine Spielzeit!",
   "playtime": "Spielzeit",
+  "playtime_leaderboard": "Spielzeit-Leaderboard",
   "day": "Tag",
   "days": "Tage",
   "hour": "Stunde",
